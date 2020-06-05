@@ -171,3 +171,15 @@ func (d *Deque) PopFront() (interface{}, bool) {
 
 	return item, true
 }
+
+// Front looks at the front of the queue but does not remove it.
+// The returned flag is true unless there were no items in the queue.
+func (d *Deque) Front() (interface{}, bool) {
+	if d.len < 1 {
+		return nil, false
+	}
+	elem := d.blocks.Front()
+	block := elem.Value.(blockT)
+	item := block[d.frontIdx]
+	return item, true
+}

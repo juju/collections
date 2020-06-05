@@ -98,6 +98,21 @@ func (s *suite) TestQueueFromBack(c *gc.C) {
 	s.checkEmpty(c)
 }
 
+func (s *suite) TestFrontEmpty(c *gc.C) {
+	v, ok := s.deque.Front()
+	c.Assert(ok, jc.IsFalse)
+	c.Assert(v, gc.IsNil)
+}
+
+func (s *suite) TestFrontValue(c *gc.C) {
+	s.deque.PushFront(42)
+	v, ok := s.deque.Front()
+	c.Assert(ok, jc.IsTrue)
+	c.Assert(v.(int), gc.Equals, 42)
+	// Item is still there.
+	c.Assert(s.deque.Len(), gc.Equals, 1)
+}
+
 func (s *suite) TestFrontBack(c *gc.C) {
 	// Populate from the front and back.
 	for i := 0; i < testLen; i++ {
