@@ -1,3 +1,3 @@
 # collections
 
-Set and deque implementations.
+Set and deque implementations, plus generic transformation functions.
