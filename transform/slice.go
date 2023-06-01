@@ -19,8 +19,8 @@ func Slice[F any, T any](from []F, transform func(F) T) []T {
 
 // SliceOrErr transforms a slice from one type to an equal length slice of another
 // by mapping the input transformation function to each member.
-// SliceOrErr supports transformations that can error. If an error is encountered, the
-// mapping will be cancelled and the error returned
+// This differs from Slice in that the transform function can returns an error.
+// If an error is encountered, the mapping will be cancelled and the error returned
 func SliceOrErr[F any, T any](from []F, transform func(F) (T, error)) ([]T, error) {
 	to := make([]T, len(from))
 	for i, oneFrom := range from {
