@@ -3,6 +3,10 @@
 
 package transform
 
+import (
+	"github.com/juju/errors"
+)
+
 // Slice transforms a slice of one type to an equal length slice of another,
 // by applying the input transformation function to each member.
 func Slice[F any, T any](from []F, transform func(F) T) []T {
@@ -11,6 +15,22 @@ func Slice[F any, T any](from []F, transform func(F) T) []T {
 		to[i] = transform(oneFrom)
 	}
 	return to
+}
+
+// SliceOrErr transforms a slice from one type to an equal length slice of another
+// by mapping the input transformation function to each member.
+// SliceOrErr supports transformations that can error. If an error is encountered, the
+// mapping will be cancelled and the error returned
+func SliceOrErr[F any, T any](from []F, transform func(F) (T, error)) ([]T, error) {
+	to := make([]T, len(from))
+	for i, oneFrom := range from {
+		var err error
+		to[i], err = transform(oneFrom)
+		if err != nil {
+			return nil, errors.Annotatef(err, "error encountered transforming slice at index %d", i)
+		}
+	}
+	return to, nil
 }
 
 // SliceToMap transforms a slice of one type to an equal length
