@@ -4,10 +4,12 @@
 package transform_test
 
 import (
-	"github.com/juju/collections/transform"
-	"github.com/juju/errors"
+	"errors"
+
 	"github.com/juju/testing"
 	gc "gopkg.in/check.v1"
+
+	"github.com/juju/collections/transform"
 )
 
 type sliceSuite struct {
@@ -81,15 +83,17 @@ func (sliceSuite) TestSliceOrErrTransformationErrors(c *gc.C) {
 		{number: 2},
 	}
 
+	testErr := errors.New("cannot transform 0")
 	thisToThat := func(from this) (that, error) {
 		if from.number == 0 {
-			return that{}, errors.New("cannot transform 0")
+			return that{}, testErr
 		}
 		return that{numero: from.number}, nil
 	}
 
 	_, err := transform.SliceOrErr(from, thisToThat)
-	c.Assert(err, gc.ErrorMatches, "error encountered transforming slice at index 1: cannot transform 0")
+	c.Assert(errors.Is(err, testErr), gc.Equals, true)
+	c.Assert(err, gc.ErrorMatches, "transforming slice at index 1: cannot transform 0")
 }
 
 func (sliceSuite) TestSliceToMapTransformation(c *gc.C) {

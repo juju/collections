@@ -4,7 +4,7 @@
 package transform
 
 import (
-	"github.com/juju/errors"
+	"fmt"
 )
 
 // Slice transforms a slice of one type to an equal length slice of another,
@@ -27,7 +27,7 @@ func SliceOrErr[F any, T any](from []F, transform func(F) (T, error)) ([]T, erro
 		var err error
 		to[i], err = transform(oneFrom)
 		if err != nil {
-			return nil, errors.Annotatef(err, "error encountered transforming slice at index %d", i)
+			return nil, fmt.Errorf("transforming slice at index %d: %w", i, err)
 		}
 	}
 	return to, nil

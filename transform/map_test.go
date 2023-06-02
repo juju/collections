@@ -46,3 +46,32 @@ func (mapSuite) TestMapToSlice(c *C) {
 	slices.Sort(to)
 	c.Assert(to, DeepEquals, []string{"a", "b", "c", "d"})
 }
+
+func (mapSuite) TestEmptyMapTransformEmpty(c *C) {
+	m := map[string]string{}
+
+	to := transform.Map(m, func(k, v string) (string, any) {
+		return k, v
+	})
+
+	c.Assert(len(to), Equals, 0)
+}
+
+func (mapSuite) TestEmptyMapTransform(c *C) {
+	m := map[string]string{
+		"one":   "two",
+		"three": "four",
+	}
+
+	to := transform.Map(m, func(k, v string) (string, int) {
+		if v == "two" {
+			return k, 2
+		}
+		return k, 4
+	})
+
+	c.Assert(to, DeepEquals, map[string]int{
+		"one":   2,
+		"three": 4,
+	})
+}
