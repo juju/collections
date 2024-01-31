@@ -18,7 +18,7 @@ func Map[K comparable, V any, Kn comparable, Vn any](
 }
 
 // MapToSlice is responsible for flattening a map of key values into a
-// contiguous slice of key value pares from the map.
+// contiguous slice of key value pairs from the map.
 func MapToSlice[K comparable, V, T any](from map[K]V, transform func(K, V) []T) []T {
 	to := make([]T, 0, len(from)*2)
 	for k, v := range from {
