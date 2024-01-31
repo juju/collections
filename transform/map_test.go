@@ -25,10 +25,11 @@ func ExampleMapToSlice() {
 	flat := transform.MapToSlice(peopleStatus, func(k, v string) []string {
 		return []string{k, v}
 	})
+	slices.Sort(flat)
 	fmt.Println(flat)
 
 	// Output:
-	// [wallyworld peachy bob happy]
+	// [bob happy peachy wallyworld]
 }
 
 func (mapSuite) TestEmptyMapToSlice(c *C) {
